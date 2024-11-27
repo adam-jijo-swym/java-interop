@@ -2,7 +2,7 @@
 
 (defn- qualify-sym [sym] (symbol (str *ns*) (str sym)))
 
-(defn- get-alternate-elements [args] (vec (flatten (partition 1 2 args))))
+(defn- alternate-elements [args] (vec (flatten (partition 1 2 args))))
 
 (def ^:private java-methods (atom #{}))
 
@@ -12,8 +12,8 @@
 
 (defmacro def-java-method
   [method-name return-type args & body]
-  (let [arg-types#    (get-alternate-elements args)
-        fn-args#      (get-alternate-elements (rest args))
+  (let [arg-types#    (alternate-elements args)
+        fn-args#      (alternate-elements (rest args))
         java-methods# (map #(with-meta % {:static true})
                            (add-method method-name arg-types# return-type))]
     `(do (gen-class :name    com.swym.Instrumented
