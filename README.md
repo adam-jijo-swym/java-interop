@@ -1,44 +1,29 @@
 # java-interop
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
-
 ## Usage
 
-FIXME: explanation
+Clojure must be aot-compiled (note uberjar profile in `project.clj`
 
-    $ java -jar java-interop-0.1.0-standalone.jar [args]
+```sh
+$ lein uberjar
+Compiling jinterop.core
+Compiling jinterop.defjava
+Compiling jinterop.random
+"myrandom clojure returns" "fromclojure54"
+"myrandom clojure returns" "fromclojure17"
+"mynotrandom clojure returns" "fromclojure50"
+Created /Users/adam/Development/work/random/java-interop/target/uberjar/jinterop-0.1.0-SNAPSHOT.jar
+Created /Users/adam/Development/work/random/java-interop/target/uberjar/jinterop-0.1.0-SNAPSHOT-standalone.jar
+```
 
-## Options
+Java files should use the generated jar file in their class path.
 
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2024 FIXME
-
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-http://www.eclipse.org/legal/epl-2.0.
-
-This Source Code may also be made available under the following Secondary
-Licenses when the conditions for such availability set forth in the Eclipse
-Public License, v. 2.0 are satisfied: GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or (at your
-option) any later version, with the GNU Classpath Exception which is available
-at https://www.gnu.org/software/classpath/license.html.
+```sh
+$ javac -cp "src/java/jinterop:target/uberjar/jinterop-0.1.0-SNAPSHOT-standalone.jar" src/java/jinterop/FromJava.java
+$ java -cp "src/java/jinterop:target/uberjar/jinterop-0.1.0-SNAPSHOT-standalone.jar" FromJava
+"myrandom clojure returns" "fromclojure5"
+"myrandom clojure returns" "fromclojure29"
+"mynotrandom clojure returns" "fromclojure50"
+fromjava17
+fromjava50
+```
