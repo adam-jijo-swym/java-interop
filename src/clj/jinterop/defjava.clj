@@ -10,7 +10,7 @@
   [method-name arg-types return-type]
   (swap! java-methods conj [method-name arg-types return-type]))
 
-(defmacro defjava
+(defmacro def-java-method
   [method-name return-type args & body]
   (let [arg-types#    (get-alternate-elements args)
         fn-args#      (get-alternate-elements (rest args))
@@ -22,10 +22,7 @@
          (let [prefixed-method-name# (symbol (str "defjava-" '~method-name))
                qualified-prefixed-method-name# (~qualify-sym
                                                 prefixed-method-name#)]
-           (intern
-            *ns*
-            prefixed-method-name#
-            (fn ~fn-args# (prn "in" prefixed-method-name# ~fn-args#) ~@body))
+           (intern *ns* prefixed-method-name# (fn ~fn-args# ~@body))
            (intern *ns*
                    '~method-name
                    (resolve qualified-prefixed-method-name#))))))
