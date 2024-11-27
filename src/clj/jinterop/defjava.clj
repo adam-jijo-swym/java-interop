@@ -1,7 +1,5 @@
 (ns jinterop.defjava)
 
-(defn- qualify-sym [sym] (symbol (str *ns*) (str sym)))
-
 (defn- alternate-elements [args] (vec (flatten (partition 1 2 args))))
 
 (def ^:private java-methods (atom #{}))
@@ -17,15 +15,9 @@
         java-methods# (map #(with-meta % {:static true})
                            (add-method method-name arg-types# return-type))]
     `(do (gen-class :name    com.swym.Instrumented
-                    :prefix  "defjava-"
+                    :prefix  ""
                     :methods ~java-methods#)
-         (let [prefixed-method-name# (symbol (str "defjava-" '~method-name))
-               qualified-prefixed-method-name# (~qualify-sym
-                                                prefixed-method-name#)]
-           (intern *ns* prefixed-method-name# (fn ~fn-args# ~@body))
-           (intern *ns*
-                   '~method-name
-                   (resolve qualified-prefixed-method-name#))))))
+         (intern *ns* '~method-name (fn ~fn-args# ~@body)))))
 
 (comment
   (let [method-name 'trial-method
